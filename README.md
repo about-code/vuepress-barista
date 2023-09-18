@@ -10,9 +10,10 @@ import { defaultTheme } from "@vuepress/theme-default";
 import getConfig from "vuepress-barista";
 
 /**
- * getConfig(filepath, opts)
+ * @param path Path to directories with markdown files (relative to vuepress' current working directory). Should be '.' or './' in most setups.
+ * @param opts Options.
  */
-const { sidebar } = getConfig("../", {
+const { sidebar } = getConfig("./", {
   stripNumbers: true,
   capitalizeWords: true,
   maxLevel: 2
