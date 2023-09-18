@@ -10,7 +10,7 @@ import { defaultTheme } from "@vuepress/theme-default";
 import getConfig from "vuepress-barista";
 
 /**
- * @param path Path to directories with markdown files
+ * @param path Path to directory with markdown files
  *        relative to vuepress' current working directory. 
  *        Should be '.' or './' in most setups.
  * @param opts Options.
