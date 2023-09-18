@@ -1,6 +1,6 @@
 {
   "name": "vuepress-barista",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A function to generate a vuepress sidebar from the file system.",
   "main": "./lib/index.js",
   "type": "module",
@@ -23,16 +23,14 @@
     "vuepress2"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.6.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@vuepress/theme-default": "^2.0.0-beta.67"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/about-code/vuepress-barista.git"
-  },
-  "dependencies": {
-    "@vuepress/theme-default": "^2.0.0-beta.67"
   }
 }
