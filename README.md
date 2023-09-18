@@ -22,7 +22,7 @@ const { sidebar } = getConfig("./", {
 export default {
   title: 'VuePress 2.x Website',
   description: 'Vuepress 2.x site with auto-generated sidebar',
-  ,theme: defaultTheme({ sidebar })
+  theme: defaultTheme({ sidebar })
 }
 ~~~
 
