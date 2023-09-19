@@ -54,14 +54,14 @@ let recursion = 0;
 function mapToSidebarItem(file: string, path: string, _basePath: string, opts: Options): SidebarGroup | string {
   // Path normalization: replace duplicate and OS-dependent path separators
   const _path = toForwardSlash(`${path}/${file}`);
-  const stat = fs.statSync(_path);
+  const stat  = fs.statSync(_path);
 
   if (stat.isDirectory()) {
     let children: SidebarConfigArray;
     if (recursion < (opts.maxLevel || 2)) {
       // Enter recursion! Get items for subdirectory!
       recursion++;
-      children = getSidebar(_path, _basePath);
+      children = getSidebar(_path, _basePath, opts);
       recursion--;
     } else {
       children = [];
@@ -71,16 +71,25 @@ function mapToSidebarItem(file: string, path: string, _basePath: string, opts: O
       const text = `${file}`
         .replace(/(\w)[-_](\w)/g, "$1 $2") // Convert single dashes and underscores to whitespaces
         .replace(/(-|_)+/g, "$1") // Convert duplicate dashes and underscores to single dash or underscore
-        .replace(/^\d+\s?/, char => opts.stripNumbers ? "" : char) // Strip leading numbers in file names
-        .replace(/(^\w{1})|(\s+\w{1})/g, char => opts.capitalizeWords ? char.toUpperCase() : char); // Capitalize
+        .replace(/^\/?\d+\s?/, char => opts.stripNumbers ? "" : char) // Strip leading numbers in file names
+        .replace(/(^\w{1})|(\s+\w{1})/g, char => opts.capitalizeWords ? char.toUpperCase() : char);
+
+      const params = `${file}`.split("--").pop()?.split(",") || [];
+      const collapsible = !!params.find(param => param === "nc") ? false : true;
 
       // Determine item link URL: check whether subdirectory has file entries or README.md
-      const files = children.filter(c => typeof c === "string") as string[];
-      const mdReadme = files.find(file => isMarkdownReadme.test(file));
-      const mdFile = files.find(file => isMarkdownFile.test(file));
+      const files       = children.filter(c => typeof c === "string") as string[];
+      const mdReadme    = files.find(file => isMarkdownReadme.test(file));
+      const mdFile      = files.find(file => isMarkdownFile.test(file));
       const pathSegment = toForwardSlash(_path.replace(_basePath, "/"));
-      const link = mdReadme || mdFile || pathSegment;
-      return { text, link, children, collapsible: true };
+      const link        = mdReadme || mdFile || pathSegment;
+      const item = {
+        text,
+        link,
+        children,
+        collapsible
+      };
+      return item;
     } else {
       return ""; // no markdown children in this directory
     }
