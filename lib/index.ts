@@ -119,7 +119,7 @@ function getSidebar(path: string, _basePath = "", opts: Options = {}): SidebarCo
    * Filter "" items that may be created
    * when attempting to map directories without .md content
    */
-  const filterEmptyDirs = (item: string | SidebarGroup) => item === "{EMPTY}";
+  const filterEmptyDirs = (item: string | SidebarGroup) => item !== "{EMPTY}";
   const filterCustom = opts.filter || filterEmptyDirs
 
   return files
