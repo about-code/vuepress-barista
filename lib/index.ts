@@ -57,14 +57,12 @@ function mapToSidebarItem(file: string, path: string, _basePath: string, opts: O
   const stat  = fs.statSync(_path);
 
   if (stat.isDirectory()) {
-    let children: SidebarConfigArray;
+    let children: SidebarConfigArray = [];
     if (recursion < (opts.maxLevel || 2)) {
       // Enter recursion! Get items for subdirectory!
       recursion++;
       children = getSidebar(_path, _basePath, opts);
       recursion--;
-    } else {
-      children = [];
     }
 
     if (children.length > 0) {
@@ -91,7 +89,8 @@ function mapToSidebarItem(file: string, path: string, _basePath: string, opts: O
       };
       return item;
     } else {
-      return ""; // no markdown children in this directory
+      // no markdown children in this directory
+      return "{EMPTY}";
     }
   } else {
     // Since basePath is a filesystem path pointing to vuepress's root
@@ -115,17 +114,20 @@ function getSidebar(path: string, _basePath = "", opts: Options = {}): SidebarCo
   }
 
   const files = fs.readdirSync(path);
-  const filter = opts.filter || function (item) {
-    // filter `null` or `undefined` items that may be created
-    // when attempting to map directories without .md content
-    return !!item
-  };
+
+  /**
+   * Filter "" items that may be created
+   * when attempting to map directories without .md content
+   */
+  const filterEmptyDirs = (item: string | SidebarGroup) => item === "{EMPTY}";
+  const filterCustom = opts.filter || filterEmptyDirs
 
   return files
     .filter(file => isMarkdownFileOrUnknown.test(file))
     .sort(sortByFileName)
     .map(file => mapToSidebarItem(file, path, _basePath, opts))
-    .filter(filter);
+    .filter(filterEmptyDirs)
+    .filter(filterCustom);
 }
 
 /**
