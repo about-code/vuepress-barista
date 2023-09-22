@@ -1,6 +1,6 @@
 {
   "name": "vuepress-barista",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A function to generate a vuepress sidebar from the file system.",
   "main": "./lib/index.js",
   "type": "module",
