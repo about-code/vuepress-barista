@@ -92,9 +92,11 @@ function mapToSidebarItem(file: string, path: string, _basePath: string, opts: O
       // no markdown children in this directory
       return "{EMPTY}";
     }
-  } else {
-    // Since basePath is a filesystem path pointing to vuepress's root
+  } else if (isMarkdownFile.test(file)) {
+    // Just return file path. Strip basePath to root path in vuepress' root
     return toForwardSlash(_path.replace(_basePath, "/"));
+  } else {
+    return "{EMPTY}";
   }
 }
 
