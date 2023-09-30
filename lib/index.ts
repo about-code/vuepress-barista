@@ -66,14 +66,17 @@ function mapToSidebarItem(file: string, path: string, _basePath: string, opts: O
     }
 
     if (children.length > 0) {
-      const text = `${file}`
+      const filenameParts = `${file}`.split("--");
+      const filenameText = filenameParts.shift();
+      const filenameArgs = filenameParts.shift();
+      const text = `${filenameText}`
         .replace(/(\w)[-_](\w)/g, "$1 $2") // Convert single dashes and underscores to whitespaces
         .replace(/(-|_)+/g, "$1") // Convert duplicate dashes and underscores to single dash or underscore
         .replace(/^\/?\d+\s?/, char => opts.stripNumbers ? "" : char) // Strip leading numbers in file names
         .replace(/(^\w{1})|(\s+\w{1})/g, char => opts.capitalizeWords ? char.toUpperCase() : char);
 
-      const params = `${file}`.split("--").pop()?.split(",") || [];
-      const collapsible = !!params.find(param => param === "nc") ? false : true;
+      const args = `${filenameArgs}`.split(",") || [];
+      const collapsible = !!args.find(param => param === "nc") ? false : true;
 
       // Determine item link URL: check whether subdirectory has file entries or README.md
       const files       = children.filter(c => typeof c === "string") as string[];
@@ -125,9 +128,9 @@ function getSidebar(path: string, _basePath = "", opts: Options = {}): SidebarCo
   const filterCustom = opts.filter || filterEmptyDirs
 
   return files
-    .filter(file => isMarkdownFileOrUnknown.test(file))
+    .filter((file: string) => isMarkdownFileOrUnknown.test(file))
     .sort(sortByFileName)
-    .map(file => mapToSidebarItem(file, path, _basePath, opts))
+    .map((file: string) => mapToSidebarItem(file, path, _basePath, opts))
     .filter(filterEmptyDirs)
     .filter(filterCustom);
 }
